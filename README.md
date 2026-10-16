@@ -4,7 +4,22 @@
 [![Tests](https://github.com/kailash2488/Reverse_string/actions/workflows/tests.yml/badge.svg)](https://github.com/kailash2488/Reverse_string/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-A beginner-friendly collection of **five ways to reverse a string in Python**, packaged as a reusable module and command-line tool. The examples use clear names, type hints, docstrings, and tests so learners can compare each technique with confidence.
+A beginner-friendly collection of **five ways to reverse a string in Python**, available as a lightweight desktop app, command-line tool, and reusable module. The examples use clear names, type hints, docstrings, and tests so learners can compare each technique with confidence.
+
+## Desktop app
+
+Launch the graphical interface with:
+
+```bash
+python gui.py
+```
+
+The app uses Python's built-in **Tkinter** toolkit, so there are no packages to install. It includes all five reversal techniques, reverse-word modes, palindrome checking, copy/clear buttons, and keyboard shortcuts:
+
+- `Ctrl+Enter` — transform the text
+- `Escape` — clear input and output
+
+On some minimal Linux installations, Tkinter is a separate system package. For Debian or Ubuntu, install it with `sudo apt install python3-tk`.
 
 ## Quick start
 
