@@ -1,60 +1,106 @@
-# hwo to reverse the string in python 
+"""Readable examples of several ways to reverse text in Python."""
 
-# using for loop reverse the string 
+from __future__ import annotations
 
-print("1. using for loop ")
-print("2. using while loop ")
-print("3. using slice oprator ")
-print("4. using reverse function ")
-print("5. using recursion ")
-option  = int(input("enter your choice "))
+import argparse
+from collections.abc import Callable, Sequence
 
 
-if option == 1:
-    def reverse_string(str):
-        str_1 = " "
-        for i in str:
-            str_1 =  i + str_1
-        return str_1
-
-    str = input("enter the string :")
-    print("original str is : ",str)
-    print("after reverse str : ",reverse_string(str))
-
-elif option == 2:
-    str_2 = input("enter string ")
-    print("original string ",str_2)
-    reverse_str2 = " "
-    count_2 = len(str_2)
-    while count_2 > 0 :
-        reverse_str2  += str_2[count_2 - 1 ]
-        count_2 = count_2 -1 
-    print(" reverse string : ",reverse_str2)
+def reverse_for_loop(text: str) -> str:
+    """Return text reversed by prepending characters in a for loop."""
+    result = ""
+    for character in text:
+        result = character + result
+    return result
 
 
-elif option == 3:
-    str_3 = input("enter the string ")
-    def reverse_str3(str_3):
-        reverse_str3 = str_3[ : : -1]
-        return reverse_str3
-    print("original string ",str_3)
-    print("reverser string",reverse_str3(str_3))
-
-elif option == 4:
-    str_4 = input("enter the string ")
-    reverse_str4 = "".join(reversed(str_4))
-    print("reverse string ",reverse_str4)
-
-elif option == 5:
-    print("5 work in progress")
-    def reverse_str5(str_5):
-        if len(str_5) == 0:
-            return str_5
-        else:
-            return reverse_str5(str_5[1:]) - str_5[0]
-    str_5 = "kailash"    
-    print("reverse string ",reverse_str5(str_5))
+def reverse_while_loop(text: str) -> str:
+    """Return text reversed by walking its indexes from right to left."""
+    result = ""
+    index = len(text) - 1
+    while index >= 0:
+        result += text[index]
+        index -= 1
+    return result
 
 
-else:
-    print("wrong input pls select from menu")
+def reverse_slice(text: str) -> str:
+    """Return text reversed with Python's extended-slice syntax."""
+    return text[::-1]
+
+
+def reverse_builtin(text: str) -> str:
+    """Return text reversed with reversed() and str.join()."""
+    return "".join(reversed(text))
+
+
+def reverse_recursive(text: str) -> str:
+    """Return text recursively (educational; unsuitable for long input)."""
+    if len(text) <= 1:
+        return text
+    return reverse_recursive(text[1:]) + text[0]
+
+
+METHODS: dict[str, Callable[[str], str]] = {
+    "for": reverse_for_loop,
+    "while": reverse_while_loop,
+    "slice": reverse_slice,
+    "builtin": reverse_builtin,
+    "recursive": reverse_recursive,
+}
+
+
+def reverse_words(text: str) -> str:
+    """Reverse word order while normalizing runs of whitespace."""
+    return " ".join(text.split()[::-1])
+
+
+def reverse_each_word(text: str) -> str:
+    """Reverse every word while preserving spaces between words."""
+    return " ".join(reverse_slice(part) for part in text.split(" "))
+
+
+def is_palindrome(text: str, *, ignore_case: bool = True) -> bool:
+    """Check if text is a palindrome, ignoring punctuation and spaces."""
+    normalized = "".join(character for character in text if character.isalnum())
+    if ignore_case:
+        normalized = normalized.casefold()
+    return normalized == reverse_slice(normalized)
+
+
+def build_parser() -> argparse.ArgumentParser:
+    """Create the command-line argument parser."""
+    parser = argparse.ArgumentParser(
+        description="Reverse text using one of five Python techniques."
+    )
+    parser.add_argument("text", nargs="?", help="text to reverse")
+    parser.add_argument(
+        "-m", "--method", choices=METHODS, default="slice",
+        help="reversal technique (default: slice)",
+    )
+    parser.add_argument("--words", action="store_true", help="reverse word order")
+    parser.add_argument("--each-word", action="store_true", help="reverse each word")
+    parser.add_argument("--palindrome", action="store_true", help="check for a palindrome")
+    return parser
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    """Run the command-line interface and return a process exit code."""
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    text = args.text if args.text is not None else input("Enter text: ")
+    if sum((args.words, args.each_word, args.palindrome)) > 1:
+        parser.error("choose only one of --words, --each-word, or --palindrome")
+    if args.palindrome:
+        print("Yes" if is_palindrome(text) else "No")
+    elif args.words:
+        print(reverse_words(text))
+    elif args.each_word:
+        print(reverse_each_word(text))
+    else:
+        print(METHODS[args.method](text))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

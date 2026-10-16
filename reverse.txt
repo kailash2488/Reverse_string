@@ -1,16 +1,10 @@
->>How to reverse a string in Python?
- Python String is the collection of the Unicode character. 
- Python has numerous functions for string manipulation, but 
- Python string library doesn't support the in-built "reverse()" 
- function. But there are various ways to reverse the string. We 
- are defining the following method to reverse the Python String.
+PYTHON STRING REVERSAL — QUICK REFERENCE
 
-  1. Using for loop
-  2. Using while loop
-  3. Using the slice operator
-  4. Using the reversed() function
-  5. Using the recursion
+Slice (recommended):       reversed_text = text[::-1]
+Built-in iterator:         reversed_text = "".join(reversed(text))
+Reverse word order:        reversed_words = " ".join(text.split()[::-1])
+Simple palindrome check:   is_palindrome = text == text[::-1]
 
-In the above code, we have declared the reverse_string() function and 
-passed the str argument. In the function body, we have declared empty 
-string variable str1 that will hold the reversed string.
+Python strings are immutable and have no reverse() method. list.reverse()
+changes a list in place, while reversed(text) returns an iterator. See
+README.md and reverse.py for complete, tested examples.
